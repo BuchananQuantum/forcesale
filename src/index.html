@@ -8,6 +8,41 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
+
+  <h1>Google One Tap Example</h1>
+    <!-- The data-callback HTML attribute sets the callback function that is run
+      when the user logs in. Here we're calling the handleCredentialsResponse JavaScript
+      function defined in the below script section to log the user into Realm.
+    -->
+    <div
+      id="g_id_onload"
+      data-client_id="<your_google_client_id>"
+      data-callback="handleCredentialsResponse"
+    ></div>
   <app-root></app-root>
 </body>
+<script src="https://unpkg.com/realm-web/dist/bundle.iife.js"></script>
+<!-- Log in with App Services and Google Authentication -->
+<script>
+  const app = new Realm.App({
+    id: "uber-apollo-vgzrt",
+  });
+  const authButton = document.getElementById("google-auth");
+  authButton.addEventListener("click", () => {
+    // The redirect URI should be on the same domain as this app and
+    // specified in the auth provider configuration.
+    const redirectUri = "https://kitchenaid.app";
+    const credentials = Realm.Credentials.google(redirectUri);
+    // Calling logIn() opens a Google authentication screen in a new window.
+    app
+      .logIn(credentials)
+      .then((user) => {
+        // The logIn() promise will not resolve until you call `handleAuthRedirect()`
+        // from the new window after the user has successfully authenticated.
+        console.log(`Logged in with id: ${user.id}`);
+      })
+      .catch((err) => console.error(err));
+  });
+</script>
+
 </html>
